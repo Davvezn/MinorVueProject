@@ -1,36 +1,51 @@
 <template>
-    <header class="header">
+    <header class="app-header">
         <div class="menu">
             <button @click="toggleMenu">=</button>
         </div>
-        <h1>Team finder</h1>
+        <nav>
+            <router-link to="/">Home</router-link>
+            <router-link to="/createNewRequest">Look-for-Team</router-link>
+        </nav>
+        <h1>Team Finder</h1>
+        <input
+            placeholder="Search"
+            v-model="searchTerm"
+            @input="emitSearchTerm"
+            class="search-input"
+        />
     </header>
 </template>
 
 <script>
 export default {
+    data() {
+        return {
+            searchTerm: '',
+        };
+    },
     methods: {
-        toggleMenu() {
-            this.$emit('toggle-filter-menu');
+        emitSearchTerm() {
+            this.$emit('search', this.searchTerm);
         },
     },
 };
 </script>
 
 <style scoped>
-.header {
+.app-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
+    padding: 10px;
     background-color: #2f2f2f;
-    color:rgb(0, 171, 83); 
+    color: rgb(0, 171, 83);
 }
-.menu button {
-    font-size: 1.5rem;
-    background: none;
-    border: none;
-    color:rgb(65, 251, 99);
-    cursor: pointer;
+.search-input {
+    width: 50%;
+    padding: 0.5rem;
+    margin: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
 }
 </style>

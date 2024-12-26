@@ -9,7 +9,8 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "elysia": "^1.1.25",
+    "@elysiajs/cors": "^1.1.1",
+    "elysia": "^1.1.26",
     "mongoose": "^8.8.3"
   }
 }

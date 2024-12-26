@@ -45,4 +45,5 @@ export default {
     box-shadow: 2px 0 5px rgba(6, 155, 229, 0.2);
     padding:1rem;
 }
+
 </style>

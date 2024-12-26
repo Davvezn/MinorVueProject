@@ -1,36 +1,102 @@
 <template>
     <section>
-        <h2>Find Teammates</h2>
-        <div v-for="request in requests" :key="request.id">
-            <RequestCard :request="request" />
-        </div>
+      <div v-if="loading" class="loading-message">Loading...</div>
+  
+      <div v-else-if="filteredRequests.length > 0" class="results-container">
+        <RequestCard
+          v-for="request in filteredRequests"
+          :key="request._id"
+          :request="request"
+        />
+      </div>
+  
+      <div v-else-if="searchTerm && !loading" class="no-results-message">
+        <p>No results found for "{{ searchTerm }}"</p>
+      </div>
+  
+      <div v-else>
+        <RequestCard
+          v-for="request in defaultRequests"
+          :key="request._id"
+          :request="request"
+        />
+      </div>
     </section>
 </template>
-
-<script>
-import RequestCard from '../components/RequestCard.vue';
-
-export default {
+  
+  <script>
+  import axios from 'axios';
+  import RequestCard from '../components/RequestCard.vue';
+  
+  export default {
     components: {
-        RequestCard,
+      RequestCard,
+    },
+    props: {
+      searchTerm: String, // Receive search term from App.vue
     },
     data() {
-        return {
-            requests: [
-                {id: 1, game: 'valorant', age: 25, description: 'looking for comp team', gameType: 'PvP'},
-                {id: 2, game: 'fortnite', age: 18, description: 'Casual game needed', gameType: 'PvP'},
-            ],
-        };
+      return {
+        filteredRequests: [],
+        defaultRequests: [],
+        loading: false,
+      };
     },
-};
+    methods: {
+      async fetchRequests() {
+        this.loading = true;
+        try {
+          const response = await axios.get('http://localhost:3023/api/requests');
+          this.defaultRequests = response.data;
+        } catch (error) {
+          console.error('Error fetching requests:', error);
+        } finally {
+          this.loading = false;
+        }
+      },
+      async performSearch() {
+        if (!this.searchTerm.trim()) {
+          this.filteredRequests = [];
+          return;
+        }
+  
+        this.loading = true;
+        try {
+          const response = await axios.get(
+            `http://localhost:3023/api/search?term=${this.searchTerm}`
+          );
+          this.filteredRequests = response.data;
+        } catch (error) {
+          console.error('Error fetching search results:', error);
+          this.filteredRequests = [];
+        } finally {
+          this.loading = false;
+        }
+      },
+    },
+    watch: {
+      searchTerm(newTerm) {
+        this.performSearch(); // Trigger search every time the term changes
+      },
+    },
+    created() {
+      this.fetchRequests(); // Fetch initial data
+    },
+  };
 </script>
-
+  
 <style scoped>
-section {
-    padding: 1rem;
+.results-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
 }
-section h2 {
-    color: rgb(0, 255, 76);
+.loading-message,
+.no-results-message {
+    text-align: center;
+    margin: 1rem;
+    font-size: 1.2rem;
+    color: #666;
 }
-
 </style>

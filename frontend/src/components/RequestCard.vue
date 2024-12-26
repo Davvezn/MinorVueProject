@@ -24,7 +24,13 @@ export default {
     padding: 1rem;
     margin: 0.5rem 0;
     border-radius: 5px;
-    background-color: #f9f9f9;
+    background-color: #222222;
     box-shadow: -4px 4px 5px rgba(6, 229, 132, 0.392);
+}
+.request-card h3 {
+    color: aquamarine;
+}
+.request-card p {
+    color: white;
 }
 </style>
