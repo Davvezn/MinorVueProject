@@ -3,7 +3,7 @@ import Elysia from "elysia"
 import { cors } from "@elysiajs/cors";;
 import RequestCard from "./modules/RequestCard.js"
 
-const db = await mongoose.connect('mongodb+srv://davidliljequist:Dali0508@databas.rwvmadr.mongodb.net/?retryWrites=true&w=majority&appName=databas')
+const db = await mongoose.connect('<database-connection>')
 
 new Elysia()
     .use(cors({ origin: 'http://localhost:5173'}))
